@@ -1,0 +1,7 @@
+user:
+  add buyPower, totalInvested
+
+buying stock, check if user has enough buyPower
+
+function
+  user is able to add balance to buyPower
