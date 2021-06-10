@@ -3,10 +3,15 @@ const models = require('../models/stockTradesModels');
 const stockTradesController = {};
 
 stockTradesController.verifyUser = async (req, res, next) => {
+  console.log(req.body);
   await models.User.findOne({username: req.body.username})
     .then(data => {
-      if(data.password != req.body.password)
-        next(new Error('invalid password'));
+      // console.log(data);
+      if(!data || data.password != req.body.password){
+        // console.log('verfiy  if conditional')
+        return res.status(200).render('../client/index');
+      }
+      // console.log('out of if')
       res.locals.user = data;
       next();
     })
@@ -19,7 +24,12 @@ stockTradesController.verifyUser = async (req, res, next) => {
 stockTradesController.getUser = async (req, res, next) => {
   await models.User.findOne({username: req.body.username})
     .then(data => {
-      res.locals.user = data;
+      // res.locals.user = data;
+      res.locals.user = {};
+      res.locals.user.firstName = data.firstName;
+      res.locals.user.lastName = data.lastName;
+      res.locals.user.buyPower = data.buyPower;
+      res.locals.user.totalInvested = data.totalInvested;
       next();
     })
     .catch(err => next({
@@ -29,6 +39,8 @@ stockTradesController.getUser = async (req, res, next) => {
 }
 
 stockTradesController.createUser = async (req, res, next) => {
+  if(req.body.firstName) req.body.firstName = req.body.firstName[0].toUpperCase() + req.body.firstName.slice(1);
+  if(req.body.lastName) req.body.lastName = req.body.lastName[0].toUpperCase() + req.body.lastName.slice(1);
   await models.User.create({
     username: req.body.username,
     password: req.body.password,
@@ -68,12 +80,12 @@ stockTradesController.createTransactionHistory = async (req, res, next) => {
 
 
 stockTradesController.addTransactionHistory = async (req, res, next) => {
-  const {stockName, price, quantity, transaction} = req.body;
-  console.log(stockName, price, quantity, transaction);
+  const {stockName, symbol, price, quantity, transaction} = req.body;
+  console.log(stockName, symbol, price, quantity, transaction);
   await models.TransactionHistory.updateOne(
     {id: req.body._id},
     {$push: 
-      {history: {stockName: stockName, price: price, quantity: quantity, transaction: transaction}}
+      {history: {stockName: stockName, symbol: symbol, price: price, quantity: quantity, transaction: transaction}}
     }
   )
     .then(next())
@@ -106,11 +118,11 @@ stockTradesController.createUserStock = async (req, res, next) => {
 }
 
 stockTradesController.updateUserStock = async (req, res, next) => {
-  console.log(req.body.stockName, req.body._id, req.body.quantity);
+  console.log(req.body.stockName, req.body.symbol, req.body._id, req.body.quantity);
   await models.UserStock.updateOne(
     {id: req.body._id, 'stocks.stockName': {$ne: req.body.stockName}},
     {$push: {
-      stocks : {'stockName': req.body.stockName}
+      stocks : {'stockName': req.body.stockName, symbol: req.body.symbol}
     }}
     
   )

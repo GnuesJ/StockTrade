@@ -13,7 +13,12 @@ module.exports = {
   devServer: {
     publicPath: '/build/',
     proxy: {
-      '*': 'http://localhost:3000',
+      '/api': 'http://localhost:3000',
+      '/': 'http://localhost:3000',
+      '/user': 'http://localhost:3000',
+      '/signup': 'http://localhost:3000',
+      '/login': 'http://localhost:3000',
+      
     }
   },
   module: {

@@ -5,11 +5,11 @@ const sessionController = require('../controllers/sessionController');
 
 const router = express.Router();
 
-// router.get('/user', 
-//   stockTradesController.getUser,
-//   stockTradesController.createTransactionHistory,
-//   (req, res) => res.status(200).json(res.locals.user)
-// );
+router.get('/user', 
+  sessionController.isLoggedIn,
+  stockTradesController.getUser,
+  (req, res) => res.status(200).json(res.locals.user)
+);
 
 // router.post('/user', 
 //   stockTradesController.createUser,

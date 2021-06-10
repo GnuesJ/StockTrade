@@ -12,9 +12,11 @@ sessionController.isLoggedIn = async (req, res, next) => {
       // if()
       // console.log(data, 'result');
       if(!data){
-        next(new Error('Invalid cookie'))
+        console.log('redirect')
+        return res.status(200).redirect('/');
       }
-      req.body._id = data.cookieId
+      req.body._id = data.cookieId;
+      req.body.username = data.username;
       console.log(req.body._id,'adding');
 
       next();
@@ -35,7 +37,7 @@ sessionController.startSession = async (req, res, next) => {
     }))
 
 
-  await models.Session.create({cookieId: res.locals.user._id})
+  await models.Session.create({cookieId: res.locals.user._id, username: res.locals.user.username})
   .then(next())
   .catch(err => next({
       log: 'Error in sessionController.startSession: failed mongoDB call: ' + err,

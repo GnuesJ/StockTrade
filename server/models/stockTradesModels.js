@@ -29,6 +29,7 @@ const mongoose = require('mongoose');
     id: {type: String, required: true, unique: true},
     history: [{
       stockName: {type: String, required: true},
+      symbol: {type: String, required: true},
       price: {type: Number, required: true},
       quantity: {type: Number, required: true},
       transaction: {type: String, required: true},
@@ -43,6 +44,7 @@ const mongoose = require('mongoose');
     id: {type: String, required: true, unique: true},
     stocks: [{
       stockName: {type: String, required: true},
+      symbol: {type: String, required: true},
       quantity: {type: Number, required: true, default: 0},
     }]
   })
