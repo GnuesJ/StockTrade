@@ -8,7 +8,9 @@ const router = express.Router();
 router.get('/user', 
   sessionController.isLoggedIn,
   stockTradesController.getUser,
-  (req, res) => res.status(200).json(res.locals.user)
+  stockTradesController.getTransactionHistory,
+  stockTradesController.getUserStock,
+  (req, res) => res.status(200).json(res.locals)
 );
 
 // router.post('/user', 
@@ -18,7 +20,13 @@ router.get('/user',
 //   (req, res) => res.status(200).json({})
 // );
 
+// router.post('/updateTotalInvested',
+//   sessionController.isLoggedIn,
+//   stockTradesController.updateTotalInvested,
+//   (req, res) => res.status(200).json()
+// )
 
+//updateTotalInvested
 router.get('/transactionhistory', 
   sessionController.isLoggedIn,
   stockTradesController.getTransactionHistory,
@@ -43,6 +51,23 @@ router.patch('/userstock',
   sessionController.isLoggedIn,
   stockTradesController.updateUserStock,
   (req, res) => res.status(200).json({})
+);
+
+
+router.patch('/addBuyPower',
+  sessionController.isLoggedIn,
+  stockTradesController.addBuyPower,
+  (req, res) => res.status(200).json({})
+);
+
+router.post('/transaction', 
+  sessionController.isLoggedIn,
+  stockTradesController.addTransactionHistory,
+  stockTradesController.updateUserStock,
+  stockTradesController.updateTotalInvested,
+  stockTradesController.getTransactionHistory,
+  stockTradesController.getUserStock,
+  (req, res) => res.status(200).json(res.locals)
 );
 
 

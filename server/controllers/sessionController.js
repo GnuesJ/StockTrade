@@ -4,6 +4,7 @@ const sessionController = {};
 
 sessionController.isLoggedIn = async (req, res, next) => {
   // req.cookie
+  console.log('insideof session', req.body);
   if(!req.cookies){
     next();
   }

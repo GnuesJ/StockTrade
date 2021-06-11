@@ -20,7 +20,7 @@ app.set('view engine', 'ejs');
 const apiRouter = require('./routes/api');
 const loginRouter = require('./routes/login');
 const signupRouter = require('./routes/signup');
-const { sign } = require('crypto');
+// const { sign } = require('crypto');
 
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));

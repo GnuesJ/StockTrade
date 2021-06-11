@@ -36,7 +36,7 @@ const mongoose = require('mongoose');
       date: {type: Date, default: Date.now}
     }]
   })
-
+//history[] stockName symbol price quantity transaction date
   const TransactionHistory = mongoose.model('transactionHistory', transactionHistorySchema);
 
 
@@ -48,7 +48,8 @@ const mongoose = require('mongoose');
       quantity: {type: Number, required: true, default: 0},
     }]
   })
-
+//history[] stockName symbol price quantity transaction date
+//stocks[] stockName symbol quantity
 
   const UserStock = mongoose.model('userStock', userStockSchema);
 

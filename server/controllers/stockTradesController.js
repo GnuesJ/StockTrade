@@ -2,6 +2,39 @@ const models = require('../models/stockTradesModels');
 
 const stockTradesController = {};
 
+stockTradesController.addBuyPower = async (req, res, next) => {
+  await models.User.updateOne(
+    {username: req.body.username},
+      {$inc: {
+        "buyPower": req.body.amount,
+      }},{upsert: true}
+    )
+      .then(next())
+      .catch(err => next({
+        log: 'Error in stockTradesController.updateUserStock: failed mongoDB call: ' + err,
+        message: { err: 'Error in stockTradesController.updateUserStock, check log for details' }
+      }));
+}
+
+stockTradesController.updateTotalInvested = async (req, res, next) => {
+  //body: JSON.stringify({stockName: stock.stockName, symbol: stock.symbol, price: stock.price, quantity: stock.quantityMark, transaction: 'buy'})})
+  // .then(response => response.json())
+  await models.User.updateOne(
+  {username: req.body.username},
+    {$inc: {
+      "buyPower": ((req.body.price * req.body.quantity) * -1),
+      "totalInvested": (req.body.price * req.body.quantity),
+    }},{upsert: true}
+  )
+    .then(next())
+    .catch(err => next({
+      log: 'Error in stockTradesController.updateUserStock: failed mongoDB call: ' + err,
+      message: { err: 'Error in stockTradesController.updateUserStock, check log for details' }
+    }));
+}
+
+// stockTradesController.addBuyPower = async (req, res, next)
+
 stockTradesController.verifyUser = async (req, res, next) => {
   console.log(req.body);
   await models.User.findOne({username: req.body.username})
@@ -81,6 +114,7 @@ stockTradesController.createTransactionHistory = async (req, res, next) => {
 
 stockTradesController.addTransactionHistory = async (req, res, next) => {
   const {stockName, symbol, price, quantity, transaction} = req.body;
+  console.log(req.body);
   console.log(stockName, symbol, price, quantity, transaction);
   await models.TransactionHistory.updateOne(
     {id: req.body._id},
